@@ -1,10 +1,7 @@
 import logging
 import cv2
 import numpy as np
-import math
 
-#Calibrate camera
-FocalLength = 533.2 * 35.75 / 17.375 #FocalLength = Calibration object width in pixels * Calibration object distance in inches / Calibration object width in inches
 
 #Make variables to control stuff that will break if its different
 captureX = 1280
@@ -38,7 +35,14 @@ while True:
 
     #find contours in prev created mask
     #contours = cv2.findContours(im, mode = cv2.RETR_TREE, method = cv2.CHAIN_APPROX_NONE)
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.5, 250)
+    circles = cv2.HoughCircles(image = gray,
+                                method = cv2.HOUGH_GRADIENT, 
+                                dp = 2, 
+                                minDist = 50, 
+                                param1 = 100,
+                                param2 = 100,
+                                minRadius = 0,
+                                maxRadius = 100)
     # ensure at least some circles were found
     if circles is not None:
 	    # convert the (x, y) coordinates and radius of the circles to integers
