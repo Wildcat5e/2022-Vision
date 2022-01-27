@@ -36,31 +36,39 @@ while True:
 	output = blurred.copy()
 
 	#Find circles
-	circles = cv2.HoughCircles(image = gray, method = cv2.HOUGH_GRADIENT, dp = 1.1, minDist = 50, param1 = 100, param2 = 30, minRadius = 10, maxRadius = 50)
+	circles = cv2.HoughCircles(image = gray, 
+							   method = cv2.HOUGH_GRADIENT, 
+							   dp = 1.1, #Resolution scale factor
+							   minDist = 50, #How far apart the circles are in pixels
+							   param1 = 100, #Like param2, but it will return circles detected with this value first
+							   param2 = 30, #How circular something is
+							   minRadius = 10, #Minimum radius of the circles
+							   maxRadius = 0) #Maximum radius of circles
 	
 	# ensure at least some circles were found
-	if circles is not None:
-		# convert the (x, y) coordinates and radius of the circles to integers
-		circles = np.round(circles[0, :]).astype("int")
-		# loop over the (x, y) coordinates and radius of the circles
-		for (x, y, r) in circles:
-			color = frame[y, x]
-			try:
-				if color[2] < 100:
-					# draw the circle in the output image, then draw a rectangle
-					# corresponding to the center of the circle
-					cv2.circle(output, (x, y), r, (255, 0, 0), 4)
-					cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 0, 255), -1)
-					print("Blue ball at:", x, "  ", y)
+	if circles is None:
+		continue
+	# convert the (x, y) coordinates and radius of the circles to integers
+	circles = np.round(circles[0, :]).astype("int")
+	# loop over the (x, y) coordinates and radius of the circles
+	for (x, y, r) in circles:
+		color = frame[y, x]
+		try:
+			if color[2] < 100:
+				# draw the circle in the output image, then draw a rectangle
+				# corresponding to the center of the circle
+				cv2.circle(output, (x, y), r, (255, 0, 0), 4)
+				cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 0, 255), -1)
+				print("Blue ball at:", x, "  ", y)
 
-				if color[0] < 60:
-					# draw the circle in the output image, then draw a rectangle
-					# corresponding to the center of the circle
-					cv2.circle(output, (x, y), r, (0, 0, 255), 4)
-					cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (255, 0, 0), -1)
-					print("Red ball at:", x, "  ", y)
-			except:
-				pass
+			if color[0] < 60:
+				# draw the circle in the output image, then draw a rectangle
+				# corresponding to the center of the circle
+				cv2.circle(output, (x, y), r, (0, 0, 255), 4)
+				cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (255, 0, 0), -1)
+				print("Red ball at:", x, "  ", y)
+		except:
+			pass
 
 
 	

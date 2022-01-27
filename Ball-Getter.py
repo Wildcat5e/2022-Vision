@@ -59,8 +59,9 @@ while True:
 		# convert the (x, y) coordinates and radius of the circles to integers
 		circles = np.round(circles[0, :]).astype("int")
 		# loop over the (x, y) coordinates and radius of the circles
+		cirNum = 0
+		cirName = "Circle"
 		for (x, y, r) in circles:
-			print(circles)
 			color = frame[y, x]
 			try:
 				if color[2] < 100:
