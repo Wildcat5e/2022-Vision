@@ -8,12 +8,13 @@ from time import sleep
 captureX = 1280
 captureY = 720
 circles = None
+anglePerPix = 62 / captureX #Microsoft lifecam hd 3000 Fov is 62*
 
 
 #iniatilize and set camera to capture from with cv2
 cap = cv2.VideoCapture(0)
 
-#set resolution to capture with cv2, Microsoft lifecam hd 3000 Fov is 62*
+#set resolution to capture with cv2
 cap.set(3, captureX)
 cap.set(4, captureY)
 
