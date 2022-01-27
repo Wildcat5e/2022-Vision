@@ -1,7 +1,11 @@
-sd.putNumber('Name', Var
+Wildcat5e Vision 2022
+=====================
 
-Type: [Ball|Ring]
-Pitch: radians
-Yaw: radians
-Color: [Blue|Red|Other]
-Distance: meters
+Network Table Format
+--------------------
+
+    Type: [Ball|Ring]
+    Pitch: radians
+    Yaw: radians
+    Color: [Blue|Red|Other]
+    Distance: meters
