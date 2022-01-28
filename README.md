@@ -9,3 +9,10 @@ Network Table Format
     Yaw: radians
     Color: [Blue|Red|Other]
     Distance: meters
+
+What the files are for
+--------------------
+
+    Ball-Getter is for ball recognition
+    Ball-Getter-Local is for testing on local machines without networktables
+    
