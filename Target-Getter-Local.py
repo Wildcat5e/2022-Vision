@@ -28,8 +28,8 @@ while True:
     #hsv = cv2.GaussianBlur(hsv, (5, 5), 0)
 
     # Threshold of blue in HSV space
-    lower_blue = np.array([60, 35, 140])
-    upper_blue = np.array([180, 255, 255])
+    lower_blue = np.array([200, 35, 50])
+    upper_blue = np.array([240, 100, 100])
 
     # preparing the mask to overlay; generates a black/white image(pixels w/i color range are white)
     im = cv2.inRange(hsv, lower_blue, upper_blue)

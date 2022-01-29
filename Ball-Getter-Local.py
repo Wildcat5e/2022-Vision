@@ -21,23 +21,18 @@ cap.set(4, captureY)
 #Insert code logic here
 kernelmatrix = np.ones((5, 5), np.uint8)
 while True:
-	times = []
-
 	#capture frame
 	_, frame = cap.read()
-	#blur then convert frame to b & w
 
+	#blur then convert frame to b & w
 	blurred = cv2.GaussianBlur(frame, (3, 3), 0)
-	#Dilate the image(make it look funky)
-	#blurred = cv2.dilate(blurred, kernelmatrix)
+	
 	#Convert image to B&W 
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 	output = blurred.copy()
 
 	#Find circles
-	
-	times.append(time.process_time())
 	circles = cv2.HoughCircles(image = gray, 
 							   method = cv2.HOUGH_GRADIENT, 
 							   dp = 0.5, #Resolution scale factor
@@ -46,8 +41,6 @@ while True:
 							   param2 = 35, #How circular something is
 							   minRadius = 10, #Minimum radius of the circles
 							   maxRadius = 100) #Maximum radius of circles
-	times.append(time.process_time())
-	
 	
 	# ensure at least some circles were found
 	if circles is None:
@@ -61,32 +54,29 @@ while True:
 		color = frame[y, x]
 		try:
 			pass
-			if color[2] < 100:
+			#For blue balls
+			if color[2] < 90:
 				# draw the circle in the output image, then draw a rectangle
 				# corresponding to the center of the circle
 				cv2.circle(output, (x, y), r, (255, 0, 0), 4)
 				cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 0, 255), -1)
-				#print("Blue ball at:", x, "  ", y)
-
-			if color[0] < 60:
+			#For red balls
+			elif color[0] < 60:
 				# draw the circle in the output image, then draw a rectangle
 				# corresponding to the center of the circle
 				cv2.circle(output, (x, y), r, (0, 0, 255), 4)
 				cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (255, 0, 0), -1)
-				#print("Red ball at:", x, "  ", y)
+
 		except:
 			pass
 
 
 	
 	cv2.imshow('Contours', output)
-		#Needed to function, do not remove, closes windows when q is pressed
+	#Needed to function, do not remove, closes windows when q is pressed
 	if cv2.waitKey(1) & 0xFF == ord('q'):
 		break
 
 
-	times.append(time.process_time())
-
-	print(times)
 	time.sleep(0.1)
 cap.release()
