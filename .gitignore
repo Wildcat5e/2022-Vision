@@ -1,0 +1,10 @@
+# Ignore all dot files
+.*
+
+# Never ignore .gitignore
+!.gitignore
+
+__pycache__/
+
+delete-me.*
+
