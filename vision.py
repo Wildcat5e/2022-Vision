@@ -9,6 +9,8 @@ class CircleFinder:
         self.capture.set(3, width)
         self.capture.set(4, height)
         self.image = None
+        self.blurred = None
+        self.grayed = None
 
     def inside_image(self, circle):
         x = circle[0]
@@ -18,13 +20,19 @@ class CircleFinder:
                0 <= y - r and y + r <= self.capture.get(4)
 
     def find(self):
-        image_exists, self.image = self.capture.read()
+        if self.image is None:
+            image_exists, self.image = self.capture.read()
+            self.blurred = self.image.copy()
+            self.grayed = self.image.copy()
+        else:
+            image_exists, self.image = self.capture.read(image=self.image)
+
         if not image_exists:
             return None
         # converts the BGR color space of image to HSV color space and blur it
         # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        blurred = cv2.GaussianBlur(src=self.image, ksize=(7, 7), sigmaX=0)
-        grayed  = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
+        cv2.GaussianBlur(src=self.image, dst=self.blurred, ksize=(7, 7), sigmaX=0)
+        grayed  = cv2.cvtColor(src=self.blurred, code=cv2.COLOR_BGR2GRAY, dst=self.grayed)
 
         circles = cv2.HoughCircles(image=grayed,
                                    method=cv2.HOUGH_GRADIENT,
