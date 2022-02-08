@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 class CircleFinder:
 
     def __init__(self, width=640, height=480):
