@@ -34,10 +34,10 @@ while True:
 		cap.read(image = frame)
 
 	#blur then convert frame to b & w
-	#blurred = cv2.GaussianBlur(frame, (7, 7), 0)
+	blurred = cv2.GaussianBlur(frame, (7, 7), 0)
 	
 	#Convert image to B&W 
-	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
 
 	
 
