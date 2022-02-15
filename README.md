@@ -31,9 +31,9 @@ Robot Lab Pi Addresses
 
     | Name  | IP Address  | Network           | Password    |
     ---------------------------------------------------------
-    | Lab   | 10.100.0.20 | WC-WIFI           |             |
-    | Table | 10.0.0.2    | WPILibPi-d33d8771 | WPILib2021! |
-    | Robot | 10.67.5.11  | 6705-team3        | 88775691    }
+    | Lab   | 10.100.0.20 | WC-WIFI           | WPILib2021! |
+    | Table | 10.100.0.22 | n/a               |             |
+    | Robot | 10.67.5.11  | 6705-team3        | 88775691    |
 
 Multi-Camera
 ------------
