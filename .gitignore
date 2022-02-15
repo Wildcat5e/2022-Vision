@@ -5,7 +5,7 @@
 !.gitignore
 
 __pycache__/
+venv/
 
 delete-me.*
 
-Target-Getter-Local.py
