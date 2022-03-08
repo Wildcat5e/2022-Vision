@@ -1,14 +1,22 @@
 import logging
 import cv2
 import numpy as np
+from cscore import CameraServer
+from networktables import NetworkTables
 import time
-
 
 #Make variables to control stuff that will break if its different
 captureX = 640
 captureY = 360
 circles = None
 anglePerPix = 62 / captureX #Microsoft lifecam hd 3000 Fov is 62*
+
+#CameraServer init stuff
+cs = CameraServer.getInstance()
+cOut = cs.putVideo("Camera", captureX, captureY)
+
+NetworkTables.initialize()
+sd = NetworkTables.getTable("SmartDashboard")
 
 
 #iniatilize and set camera to capture from with cv2
@@ -25,6 +33,7 @@ gray = None
 blurred = Noneoutput = None
 
 while True:
+	start = time.process_time()
 	if frame is None:
 		#capture frame
 		_, frame = cap.read()
@@ -32,30 +41,33 @@ while True:
 		blurred = frame.copy()
 	else:
 		cap.read(image = frame)
+	#timeaftercap = time.process_time() - start
 
 	#blur then convert frame to b & w
-	blurred = cv2.GaussianBlur(frame, (7, 7), 0)
-	
-	#Convert image to B&W 
-	gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
+	#blurred = cv2.GaussianBlur(frame, (7, 7), 0)
 
-	
+	#Convert image to B&W
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+
+	circlestart = time.process_time()
 	#Find circles
-	circles = cv2.HoughCircles(image = gray, 
-							   method = cv2.HOUGH_GRADIENT, 
+	circles = cv2.HoughCircles(image = gray,
+							   method = cv2.HOUGH_GRADIENT,
 							   dp = 0.5, #Resolution scale factor
 							   minDist = 50, #How far apart the circles are in pixels
 							   param1 = 120, #Like param2, but it will return circles detected with this value first
 							   param2 = 40, #How circular something is
 							   minRadius = 10, #Minimum radius of the circles
 							   maxRadius = 100) #Maximum radius of circles
-	
+	circlestime = time.process_time() - circlestart
+
 	# ensure at least some circles were found
 	if circles is None:
 		continue
 	# convert the (x, y) coordinates and radius of the circles to integers
 	circles = np.round(circles[0, :]).astype("int")
+
 	# loop over the (x, y) coordinates and radius of the circles
 	for (x, y, r) in circles:
 		if x < 0 or y < 0 or x > (captureX - 1) or y > (captureY - 1):
@@ -80,10 +92,11 @@ while True:
 			pass
 
 
-	print(circles.size)
-	cv2.imshow('Contours', frame)
-	#Needed to function, do not remove, closes windows when q is pressed
-	if cv2.waitKey(1) & 0xFF == ord('q'):
-		break
+
+	cOut.putFrame(frame)
+	print("Total = ", time.process_time() - start, " Total circles = ", circles.size, " Circle finding = ", circlestime)
+
+
+
 
 cap.release()
