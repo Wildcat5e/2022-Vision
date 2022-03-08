@@ -80,7 +80,7 @@ while True:
 			pass
 
 
-	
+	print(circles.size)
 	cv2.imshow('Contours', frame)
 	#Needed to function, do not remove, closes windows when q is pressed
 	if cv2.waitKey(1) & 0xFF == ord('q'):

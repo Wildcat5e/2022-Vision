@@ -1,10 +1,6 @@
 import cv2
 import numpy as np
-from time import sleep
 
-
-#Calibrate camera
-FocalLength = 533.2 * 35.75 / 17.375 #FocalLength = Calibration object width in pixels * Calibration object distance in inches / Calibration object width in inches
 
 #Make variables to control stuff that will break if its different
 captureX = 640
@@ -41,11 +37,29 @@ while True:
     
 
     #find contours in prev created mask
+    squaresfound = 0
     contours, hierarchy = cv2.findContours(im, mode = cv2.RETR_TREE, method = cv2.CHAIN_APPROX_NONE)
     for cnt in contours:
         approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt, True), True)
         if(len(approx) == 4): 
             cv2.drawContours(output, [approx], 0, (0, 0, 255), 5)
+            M = cv2.moments(cnt)
+            cx = int(M['m10']/M['m00'])
+            cy = int(M['m01']/M['m00'])
+            if squaresfound == 0:
+                listx = [cx]
+                listy = [cy]
+                squaresfound = squaresfound + squaresfound
+
+            else:
+                listx.append(cx)
+                listy.append(cy)
+
+
+            meanx = np.mean(listx)
+            meany = np.mean(listy)
+            print(meanx)
+
     
 
     cv2.imshow('Output', output)
