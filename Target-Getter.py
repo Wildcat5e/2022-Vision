@@ -25,8 +25,8 @@ while True:
     #hsv = cv2.GaussianBlur(hsv, (5, 5), 0)
 
     # Threshold of blue in HSV space
-    lower_blue = np.array([60, 35, 100])
-    upper_blue = np.array([160, 255, 255])
+    lower_blue = np.array([70, 230, 140])
+    upper_blue = np.array([90, 255, 255])
 
     # preparing the mask to overlay; generates a black/white image(pixels w/i color range are white)
     im = cv2.inRange(hsv, lower_blue, upper_blue)
@@ -41,24 +41,29 @@ while True:
     contours, hierarchy = cv2.findContours(im, mode = cv2.RETR_TREE, method = cv2.CHAIN_APPROX_NONE)
     for cnt in contours:
         approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt, True), True)
-        if(len(approx) == 4): 
-            cv2.drawContours(output, [approx], 0, (0, 0, 255), 5)
-            M = cv2.moments(cnt)
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
-            if squaresfound == 0:
-                listx = [cx]
-                listy = [cy]
-                squaresfound = squaresfound + squaresfound
+        
+        cv2.drawContours(output, [approx], 0, (0, 0, 255), 5)
+        M = cv2.moments(cnt)
+        cx = int(M['m10']/M['m00'])
+        cy = int(M['m01']/M['m00'])
+        if squaresfound == 0:
+            listx = [cx]
+            listy = [cy]
+            squaresfound = squaresfound + squaresfound
 
-            else:
-                listx.append(cx)
-                listy.append(cy)
+        else:
+            listx.append(cx)
+            listy.append(cy)
 
 
-            meanx = np.mean(listx)
-            meany = np.mean(listy)
-            print(meanx)
+        meanx = np.mean(listx)
+        meany = np.mean(listy)
+        #print(meanx)
+        try:
+            color = hsv[cx, cy]
+            print(color)
+        except:
+            pass
 
     
 
