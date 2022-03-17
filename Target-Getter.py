@@ -1,11 +1,14 @@
 import cv2
 import numpy as np
+from time import sleep
 
 
 #Make variables to control stuff that will break if its different
 captureX = 640
 captureY = 360
 kernel = np.ones((5, 5), 'uint8')
+ppdYaw = captureX / 62
+ppdPitch = captureY / 34.875
 
 #iniatilize and set camera to capture from with cv2
 cap = cv2.VideoCapture(0)
@@ -25,8 +28,8 @@ while True:
     #hsv = cv2.GaussianBlur(hsv, (5, 5), 0)
 
     # Threshold of blue in HSV space
-    lower_blue = np.array([70, 230, 140])
-    upper_blue = np.array([90, 255, 255])
+    lower_blue = np.array([60, 30, 140])
+    upper_blue = np.array([100, 255, 255])
 
     # preparing the mask to overlay; generates a black/white image(pixels w/i color range are white)
     im = cv2.inRange(hsv, lower_blue, upper_blue)
@@ -49,7 +52,7 @@ while True:
         if squaresfound == 0:
             listx = [cx]
             listy = [cy]
-            squaresfound = squaresfound + squaresfound
+            squaresfound = 1
 
         else:
             listx.append(cx)
@@ -58,12 +61,17 @@ while True:
 
         meanx = np.mean(listx)
         meany = np.mean(listy)
-        #print(meanx)
-        try:
-            color = hsv[cx, cy]
-            print(color)
-        except:
-            pass
+
+        yawDegrees = int(meanx / ppdYaw) - 31
+        pitchDegrees = int(34.875 - (meany / ppdPitch))
+        dist = np.arctan(pitchDegrees * 106)
+
+        
+        print(yawDegrees)
+        print(pitchDegrees)
+        print(dist)
+        print()
+        
 
     
 
@@ -76,6 +84,8 @@ while True:
     #Needed to function, do not remove, closes windows when q is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    
+    sleep(0.5)
 
     
 cv2.destroyAllWindows()
